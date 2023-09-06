@@ -1,15 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:http/http.dart' as http;
-
-import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
+import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/colors/gf_color.dart';
 import 'package:getwidget/components/appbar/gf_appbar.dart';
 import 'package:image_picker/image_picker.dart';
 
 class MedicineRecognitionMLKit extends StatefulWidget {
+  const MedicineRecognitionMLKit({super.key});
+
   @override
   _MedicineRecognitionMLKitState createState() =>
       _MedicineRecognitionMLKitState();
@@ -17,9 +18,9 @@ class MedicineRecognitionMLKit extends StatefulWidget {
 
 class _MedicineRecognitionMLKitState extends State<MedicineRecognitionMLKit> {
   var _imageText = [];
-  var _drugList = [];
-  File image;
-  ImagePicker imagePicker;
+  final _drugList = [];
+  late File image;
+  late ImagePicker imagePicker;
 
   String baseURL = "https://dailymed.nlm.nih.gov/dailymed/services";
   String version = "v2";
@@ -29,8 +30,8 @@ class _MedicineRecognitionMLKitState extends State<MedicineRecognitionMLKit> {
 
   _callAPI(String drugName) async {
     try {
-      final response = await http
-          .get('$baseURL/$version/$endpoint\.$format?$parameter_1=$drugName');
+      final response = await http.get(
+          '$baseURL/$version/$endpoint.$format?$parameter_1=$drugName' as Uri);
       print(response);
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
@@ -53,16 +54,16 @@ class _MedicineRecognitionMLKitState extends State<MedicineRecognitionMLKit> {
 
   captureFromCamera() async {
     setState(() {
-      image = null;
+      image;
       _imageText.clear();
       _drugList.clear();
     });
     try {
-      PickedFile pickedFile =
-          await imagePicker.getImage(source: ImageSource.camera);
-      File imageNew = File(pickedFile.path);
+      // PickedFile pickedFile =
+      //     await imagePicker.getImage(source: ImageSource.camera);
+      // File imageNew = File(pickedFile.path);
       setState(() {
-        image = imageNew;
+        // image = imageNew;
         convertImageToText();
       });
     } on Exception catch (e) {
@@ -73,16 +74,16 @@ class _MedicineRecognitionMLKitState extends State<MedicineRecognitionMLKit> {
 
   chooseFromGalery() async {
     setState(() {
-      image = null;
+      image;
       _imageText.clear();
       _drugList.clear();
     });
     try {
-      PickedFile pickedFile =
-          await imagePicker.getImage(source: ImageSource.gallery);
-      File imageNew = File(pickedFile.path);
+      // PickedFile pickedFile =
+      //     await imagePicker.getImage(source: ImageSource.gallery);
+      // File imageNew = File(pickedFile.path);
       setState(() {
-        image = imageNew;
+        // image = imageNew;
         convertImageToText();
       });
     } on Exception catch (e) {
@@ -104,7 +105,7 @@ class _MedicineRecognitionMLKitState extends State<MedicineRecognitionMLKit> {
           for (TextElement textElement in textLine.elements) {
             //remove all special symbols from string
             _imageText
-                .add(textElement.text.replaceAll(new RegExp(r'[^\w\s]+'), ''));
+                .add(textElement.text!.replaceAll(RegExp(r'[^\w\s]+'), ''));
           }
         }
       }
@@ -147,7 +148,7 @@ class _MedicineRecognitionMLKitState extends State<MedicineRecognitionMLKit> {
         body: Center(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.all(40.0),
+              padding: const EdgeInsets.all(40.0),
               child: (image == null)
                   ? Icon(
                       Icons.search,
@@ -156,40 +157,40 @@ class _MedicineRecognitionMLKitState extends State<MedicineRecognitionMLKit> {
                     )
                   : Column(
                       children: [
-                        Text(
+                        const Text(
                           "Captured Image",
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w400,
                               color: Colors.purple),
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Image.file(
                           image,
                           width: 140,
                           height: 192,
                           fit: BoxFit.fill,
                         ),
-                        SizedBox(height: 20.0),
+                        const SizedBox(height: 20.0),
 
-                        Text(
+                        const Text(
                           "All words found in the image",
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w400,
                               color: Colors.purple),
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Text(_imageText.toString()),
-                        SizedBox(height: 20.0),
-                        Text(
+                        const SizedBox(height: 20.0),
+                        const Text(
                           "Medicine words",
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w400,
                               color: Colors.purple),
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Text(_drugList.toString()),
                         // (_drugs.isNotEmpty) ? Text(_drugs) : Text("No data available"),
                       ],
@@ -209,7 +210,7 @@ class _MedicineRecognitionMLKitState extends State<MedicineRecognitionMLKit> {
                 onPressed: () async {
                   captureFromCamera();
                 },
-                child: Icon(Icons.camera),
+                child: const Icon(Icons.camera),
               ),
               FloatingActionButton(
                 heroTag: null,
@@ -217,7 +218,7 @@ class _MedicineRecognitionMLKitState extends State<MedicineRecognitionMLKit> {
                 onPressed: () async {
                   chooseFromGalery();
                 },
-                child: Icon(Icons.file_upload),
+                child: const Icon(Icons.file_upload),
               )
             ],
           ),

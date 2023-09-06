@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:openemr/utils/customlistloadingshimmer.dart';
@@ -7,20 +6,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/user.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  User user;
+  late User user;
   bool _isLoading = false;
 
-  final formKey = new GlobalKey<FormState>();
-  String _username, _password, _url;
+  final formKey = GlobalKey<FormState>();
+  late String _username, _password, _url;
 
   void _showSnackBar(String text) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(new SnackBar(content: new Text(text)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
   void _toggleLoadingStatus(bool newLoadingState) {
@@ -55,67 +55,67 @@ class _LoginScreenState extends State<LoginScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            SizedBox(
+                            const SizedBox(
                               height: 25,
                             ),
                             Image.asset(
                               'lib/assets/images/gflogo.png',
                               width: width * 0.25,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             SizedBox(
                               child: TextFormField(
                                 validator: (value) {
-                                  if (value.isEmpty) {
+                                  if (value!.isEmpty) {
                                     return 'Please enter username';
                                   }
                                   return null;
                                 },
-                                onSaved: (val) => _username = val,
-                                decoration: InputDecoration(
+                                onSaved: (val) => _username = val!,
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     labelText: 'Username'),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             SizedBox(
                               child: TextFormField(
                                 validator: (value) {
-                                  if (value.isEmpty) {
+                                  if (value!.isEmpty) {
                                     return 'Please enter password';
                                   }
                                   return null;
                                 },
-                                onSaved: (val) => _password = val,
+                                onSaved: (val) => _password = val!,
                                 obscureText: true,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     labelText: 'Password'),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             SizedBox(
                               child: TextFormField(
                                 validator: (value) {
-                                  if (value.isEmpty) {
+                                  if (value!.isEmpty) {
                                     return 'Please enter url';
                                   }
                                   return null;
                                 },
-                                onSaved: (val) => _url = val,
-                                decoration: InputDecoration(
+                                onSaved: (val) => _url = val!,
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     labelText: 'URL',
                                     hintText: "http://example.com"),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             GFButton(
@@ -135,21 +135,21 @@ class _LoginScreenState extends State<LoginScreen> {
   void submit(context) async {
     final prefs = await SharedPreferences.getInstance();
     final form = formKey.currentState;
-    RestDatasource api = new RestDatasource();
-    if (form.validate()) {
-      form.save();
-      _toggleLoadingStatus(true);
-      api.login(_username.trim(), _password.trim(), _url).then((User user) {
-        prefs.setString('token', user.tokenType + " " + user.accessToken);
-        prefs.setString('username', user.username);
-        prefs.setString('password', user.password);
-        prefs.setString('baseUrl', user.baseUrl);
-        _toggleLoadingStatus(false);
-        Navigator.pop(context);
-      }).catchError((Object error) {
-        _toggleLoadingStatus(false);
-        _showSnackBar(error.toString());
-      });
-    }
+    RestDatasource api = RestDatasource();
+    // if (form!.validate()) {
+    //   form.save();
+    //   _toggleLoadingStatus(true);
+    //   api.login(_username.trim(), _password.trim(), _url).then((User user) {
+    //     prefs.setString('token', "${user.tokenType} ${user.accessToken}");
+    //     prefs.setString('username', user.username);
+    //     prefs.setString('password', user.password);
+    //     prefs.setString('baseUrl', user.baseUrl);
+    //     _toggleLoadingStatus(false);
+    //     Navigator.pop(context);
+    //   }).catchError((Object error) {
+    //     _toggleLoadingStatus(false);
+    //     _showSnackBar(error.toString());
+    //   });
   }
 }
+// }

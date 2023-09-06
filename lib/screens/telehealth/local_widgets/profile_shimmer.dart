@@ -6,7 +6,7 @@ Widget profileShimmer(BuildContext context) {
       child: Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      SizedBox(
+      const SizedBox(
         height: 40,
       ),
       Container(
@@ -14,14 +14,14 @@ Widget profileShimmer(BuildContext context) {
         width: MediaQuery.of(context).size.width * 0.8,
         color: Colors.white,
       ),
-      SizedBox(
+      const SizedBox(
         height: 10,
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             backgroundColor: Colors.white,
             radius: 40,
           ),
@@ -35,7 +35,7 @@ Widget profileShimmer(BuildContext context) {
                   width: MediaQuery.of(context).size.width * 0.55,
                   color: Colors.white,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Container(
                   height: 20,
                   width: MediaQuery.of(context).size.width * 0.5,
@@ -56,7 +56,7 @@ Widget profileShimmer(BuildContext context) {
               width: MediaQuery.of(context).size.width * 0.7,
               color: Colors.white,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
               height: 20,
               width: MediaQuery.of(context).size.width * 0.7,

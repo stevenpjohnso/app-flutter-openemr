@@ -4,6 +4,8 @@ import 'package:getwidget/getwidget.dart';
 import '../../screens/drawer/webview.dart';
 
 class DrawerPage extends StatefulWidget {
+  const DrawerPage({super.key});
+
   @override
   _DrawerPageState createState() => _DrawerPageState();
 }
@@ -16,11 +18,11 @@ class _DrawerPageState extends State<DrawerPage> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: const [Color(0xFFD685FF), Color(0xFF7466CC)])),
+                      colors: [Color(0xFFD685FF), Color(0xFF7466CC)])),
               height: 250,
               child: GFDrawerHeader(
                 closeButton: InkWell(
@@ -32,14 +34,14 @@ class _DrawerPageState extends State<DrawerPage> {
                     color: GFColors.SUCCESS,
                   ),
                 ),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: const [Color(0xFFD685FF), Color(0xFF7466CC)],
+                    colors: [Color(0xFFD685FF), Color(0xFF7466CC)],
                   ),
                 ),
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -51,7 +53,7 @@ class _DrawerPageState extends State<DrawerPage> {
                         'lib/assets/images/gflogo.png',
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 5,
                     ),
                     Text(
@@ -61,10 +63,10 @@ class _DrawerPageState extends State<DrawerPage> {
                           fontWeight: FontWeight.w500,
                           color: Colors.white),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 5,
                     ),
-                    const Text(
+                    Text(
                       'open-emr.org',
                       style: TextStyle(color: Colors.white),
                     ),
@@ -120,7 +122,8 @@ class _DrawerPageState extends State<DrawerPage> {
                       ),
                     ),
                   ),
-                  Divider(color: GFColors.FOCUS, indent: 20, endIndent: 30),
+                  const Divider(
+                      color: GFColors.FOCUS, indent: 20, endIndent: 30),
                   const Padding(
                     padding: EdgeInsets.only(left: 2),
                     child: Text("Last update: 04/08/21"),

@@ -8,7 +8,7 @@ Widget listItemShimmer(BuildContext context) {
       margin: const EdgeInsets.all(5),
       child: Row(
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             backgroundColor: Colors.white,
             radius: 30,
           ),
@@ -22,7 +22,7 @@ Widget listItemShimmer(BuildContext context) {
                   width: MediaQuery.of(context).size.width * 0.55,
                   color: Colors.white,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Container(
                   height: 20,
                   width: MediaQuery.of(context).size.width * 0.5,
@@ -38,7 +38,7 @@ Widget listItemShimmer(BuildContext context) {
 }
 
 Widget customListLoadingShimmer(BuildContext context,
-    {String loadingMessage, int listLength = 1}) {
+    {String? loadingMessage, int listLength = 1}) {
   return Container(
     alignment: Alignment.center,
     width: MediaQuery.of(context).size.width * 0.8,
@@ -53,7 +53,7 @@ Widget customListLoadingShimmer(BuildContext context,
                 padding: const EdgeInsets.only(bottom: 10),
                 child: Text(
                   loadingMessage,
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                  style: const TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ),
         for (var i = 0; i < listLength; i++) listItemShimmer(context)

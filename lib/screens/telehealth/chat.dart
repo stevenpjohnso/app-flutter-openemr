@@ -6,7 +6,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:dash_chat/dash_chat.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:openemr/utils/customlistloadingshimmer.dart';
@@ -18,13 +17,13 @@ class ChatScreen extends StatefulWidget {
   final String userId;
   final String userName;
 
-  ChatScreen(
-      {Key key,
-      @required this.messagesId,
-      @required this.heading,
-      @required this.userId,
-      @required this.userName,
-      @required this.chatDocumentId})
+  const ChatScreen(
+      {required Key key,
+      required this.messagesId,
+      required this.heading,
+      required this.userId,
+      required this.userName,
+      required this.chatDocumentId})
       : super(key: key);
 
   @override
@@ -33,8 +32,8 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final GlobalKey<DashChatState> _chatViewKey = GlobalKey<DashChatState>();
-  final Firestore _store = Firestore.instance;
-  ChatUser chatUser;
+  final FirebaseFirestore _store = FirebaseFirestore.instance;
+  late ChatUser chatUser;
   final picker = ImagePicker();
 
   List<ChatMessage> messages = List<ChatMessage>.empty(growable: true);
@@ -48,61 +47,60 @@ class _ChatScreenState extends State<ChatScreen> {
       name: widget.userName,
       uid: widget.userId,
     );
-    this.setState(() {
+    setState(() {
       chatUser = chatUser;
     });
     super.initState();
   }
 
   void systemMessage() {
-    Timer(Duration(milliseconds: 300), () {
+    Timer(const Duration(milliseconds: 300), () {
       if (i < 6) {
         setState(() {
           messages = [...messages, m[i]];
         });
         i++;
       }
-      Timer(Duration(milliseconds: 300), () {
-        _chatViewKey.currentState.scrollController
-          ..animateTo(
-            _chatViewKey.currentState.scrollController.position.maxScrollExtent,
-            curve: Curves.easeOut,
-            duration: const Duration(milliseconds: 300),
-          );
+      Timer(const Duration(milliseconds: 300), () {
+        _chatViewKey.currentState!.scrollController.animateTo(
+          _chatViewKey.currentState!.scrollController.position.maxScrollExtent,
+          curve: Curves.easeOut,
+          duration: const Duration(milliseconds: 300),
+        );
       });
     });
   }
 
   void onSend(ChatMessage message) async {
     print(message.toJson());
-    await _store.collection('messages').document(widget.messagesId).updateData({
-      "messages": FieldValue.arrayUnion([message.toJson()])
-    });
+    // await _store.collection('messages').document(widget.messagesId).updateData({
+    //   "messages": FieldValue.arrayUnion([message.toJson()])
+    // });
     if (message.text != null && message.text != "") {
-      _store
-          .collection('chats')
-          .document(widget.chatDocumentId)
-          .updateData({"lastMessage": message.text});
+      // _store
+      // .collection('chats')
+      // .document(widget.chatDocumentId)
+      // .updateData({"lastMessage": message.text});
     }
   }
 
   void uploadImage(result) async {
-    final StorageReference storageRef = FirebaseStorage.instance
-        .ref()
-        .child(widget.userId + "-" + DateTime.now().toString());
+    // final StorageReference storageRef = FirebaseStorage.instance
+    // .ref()
+    // .child("${widget.userId}-${DateTime.now()}");
 
-    StorageUploadTask uploadTask = storageRef.putFile(
-      result,
-      StorageMetadata(
-        contentType: 'image/jpg',
-      ),
-    );
-    StorageTaskSnapshot download = await uploadTask.onComplete;
+    // StorageUploadTask uploadTask = storageRef.putFile(
+    //   result,
+    //   StorageMetadata(
+    //     contentType: 'image/jpg',
+    //   ),
+    // );
+    // StorageTaskSnapshot download = await uploadTask.onComplete;
 
-    String url = await download.ref.getDownloadURL();
+    // String url = await download.ref.getDownloadURL();
 
-    ChatMessage message = ChatMessage(text: "", user: chatUser, image: url);
-    onSend(message);
+    // ChatMessage message = ChatMessage(text: "", user: chatUser, image: url);
+    // onSend(message);
   }
 
   @override
@@ -121,14 +119,14 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           title: Text(
             widget.heading,
-            style: TextStyle(fontSize: 17),
+            style: const TextStyle(fontSize: 17),
           ),
           centerTitle: true,
         ),
         body: StreamBuilder(
-            stream: Firestore.instance
+            stream: FirebaseFirestore.instance
                 .collection('messages')
-                .document(widget.messagesId)
+                .doc(widget.messagesId)
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting ||
@@ -139,12 +137,12 @@ class _ChatScreenState extends State<ChatScreen> {
                       listLength: 6),
                 );
               } else {
-                DocumentSnapshot items = snapshot.data;
-                List msg = items.data["messages"] == null
-                    ? []
-                    : items.data["messages"];
+                DocumentSnapshot<Map<String, dynamic>>? items = snapshot.data;
+                // List msg = items!.data["messages"] ?? [];
                 List<ChatMessage> messages = [];
-                msg.forEach((item) => messages.add(ChatMessage.fromJson(item)));
+                // for (var item in msg) {
+                //   messages.add(ChatMessage.fromJson(item));
+                // }
                 return DashChat(
                   key: _chatViewKey,
                   inverted: false,
@@ -152,7 +150,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   sendOnEnter: true,
                   textInputAction: TextInputAction.send,
                   user: chatUser,
-                  inputDecoration: InputDecoration.collapsed(
+                  inputDecoration: const InputDecoration.collapsed(
                       hintText: "Add message here..."),
                   dateFormat: DateFormat('yyyy-MMM-dd'),
                   timeFormat: DateFormat('HH:mm'),
@@ -168,9 +166,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   },
                   inputMaxLines: 5,
                   messageContainerPadding:
-                      EdgeInsets.only(left: 5.0, right: 5.0),
+                      const EdgeInsets.only(left: 5.0, right: 5.0),
                   alwaysShowSend: false,
-                  inputTextStyle: TextStyle(fontSize: 16.0),
+                  inputTextStyle: const TextStyle(fontSize: 16.0),
                   inputContainerStyle: BoxDecoration(
                     border: Border.all(width: 0.0),
                     color: Colors.white,
@@ -182,35 +180,35 @@ class _ChatScreenState extends State<ChatScreen> {
                   showTraillingBeforeSend: true,
                   trailing: <Widget>[
                     IconButton(
-                      icon: Icon(Icons.camera_alt),
+                      icon: const Icon(Icons.camera_alt),
                       onPressed: () async {
-                        final pickedFile = await picker.getImage(
-                          source: ImageSource.camera,
-                          imageQuality: 80,
-                          maxHeight: 400,
-                          maxWidth: 400,
-                        );
+                        // final pickedFile = await picker.getImage(
+                        //   source: ImageSource.camera,
+                        //   imageQuality: 80,
+                        //   maxHeight: 400,
+                        //   maxWidth: 400,
+                        // );
 
-                        if (pickedFile != null) {
-                          File result = File(pickedFile.path);
-                          uploadImage(result);
-                        }
+                        // if (pickedFile != null) {
+                        //   File result = File(pickedFile.path);
+                        //   uploadImage(result);
+                        // }
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.photo),
+                      icon: const Icon(Icons.photo),
                       onPressed: () async {
-                        final pickedFile = await picker.getImage(
-                          source: ImageSource.gallery,
-                          imageQuality: 80,
-                          maxHeight: 400,
-                          maxWidth: 400,
-                        );
+                        // final pickedFile = await picker.getImage(
+                        //   source: ImageSource.gallery,
+                        //   imageQuality: 80,
+                        //   maxHeight: 400,
+                        //   maxWidth: 400,
+                        // );
 
-                        if (pickedFile != null) {
-                          File result = File(pickedFile.path);
-                          uploadImage(result);
-                        }
+                        // if (pickedFile != null) {
+                        //   File result = File(pickedFile.path);
+                        //   uploadImage(result);
+                        // }
                       },
                     ),
                   ],

@@ -1,36 +1,34 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:openemr/screens/login/create_account.dart';
 import 'package:openemr/screens/login/login2.dart';
 import 'package:openemr/screens/telehealth/telehealth.dart';
 import 'package:openemr/utils/customlistloadingshimmer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../models/user.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterFirebaseScreen extends StatefulWidget {
+  const RegisterFirebaseScreen({super.key});
+
   @override
   _RegisterFirebaseScreenState createState() => _RegisterFirebaseScreenState();
 }
 
 class _RegisterFirebaseScreenState extends State<RegisterFirebaseScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final Firestore _store = Firestore.instance;
+  final FirebaseFirestore _store = FirebaseFirestore.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  final userRef = Firestore.instance.collection('username');
-  User user;
+  final userRef = FirebaseFirestore.instance.collection('username');
+  late User user;
   bool _isLoading = false;
 
-  final formKey = new GlobalKey<FormState>();
-  String _email, _password, _name, _userid;
+  final formKey = GlobalKey<FormState>();
+  late String _email, _password, _name, _userid;
 
   void _showSnackBar(String text) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(new SnackBar(content: new Text(text)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
   void _toggleLoadingStatus(bool newLoadingState) {
@@ -61,14 +59,14 @@ class _RegisterFirebaseScreenState extends State<RegisterFirebaseScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      SizedBox(
+                      const SizedBox(
                         height: 25,
                       ),
                       Image.asset(
                         'lib/assets/images/firebase.png',
                         width: width * 0.25,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       _isLoading
@@ -79,70 +77,70 @@ class _RegisterFirebaseScreenState extends State<RegisterFirebaseScreen> {
                                 SizedBox(
                                   child: TextFormField(
                                     validator: (value) {
-                                      if (value.isEmpty) {
+                                      if (value!.isEmpty) {
                                         return 'Please enter your full name';
                                       }
                                       return null;
                                     },
-                                    onSaved: (val) => _name = val,
-                                    decoration: InputDecoration(
+                                    onSaved: (val) => _name = val!,
+                                    decoration: const InputDecoration(
                                         border: OutlineInputBorder(),
                                         labelText: 'Full Name'),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 20,
                                 ),
                                 SizedBox(
                                   child: TextFormField(
                                     validator: (value) {
-                                      if (value.isEmpty) {
+                                      if (value!.isEmpty) {
                                         return 'Username can\'t be blank';
                                       }
                                       return null;
                                     },
-                                    onSaved: (val) => _userid = val,
-                                    decoration: InputDecoration(
+                                    onSaved: (val) => _userid = val!,
+                                    decoration: const InputDecoration(
                                         border: OutlineInputBorder(),
                                         labelText: 'Username'),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 20,
                                 ),
                                 SizedBox(
                                   child: TextFormField(
                                     validator: (value) {
-                                      if (value.isEmpty) {
+                                      if (value!.isEmpty) {
                                         return 'Please enter your email';
                                       }
                                       return null;
                                     },
-                                    onSaved: (val) => _email = val,
-                                    decoration: InputDecoration(
+                                    onSaved: (val) => _email = val!,
+                                    decoration: const InputDecoration(
                                         border: OutlineInputBorder(),
                                         labelText: 'E-mail'),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 20,
                                 ),
                                 SizedBox(
                                   child: TextFormField(
                                     validator: (value) {
-                                      if (value.isEmpty) {
+                                      if (value!.isEmpty) {
                                         return 'Please enter password';
                                       }
                                       return null;
                                     },
-                                    onSaved: (val) => _password = val,
+                                    onSaved: (val) => _password = val!,
                                     obscureText: true,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                         border: OutlineInputBorder(),
                                         labelText: 'Password'),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 20,
                                 ),
                                 GFButton(
@@ -156,7 +154,7 @@ class _RegisterFirebaseScreenState extends State<RegisterFirebaseScreen> {
                                   color: GFColors.DARK,
                                   type: GFButtonType.outline2x,
                                 ),
-                                Padding(
+                                const Padding(
                                   padding: EdgeInsets.only(top: 25, bottom: 25),
                                   child: Text(
                                     "-------OR--------",
@@ -166,19 +164,22 @@ class _RegisterFirebaseScreenState extends State<RegisterFirebaseScreen> {
                                         color: Colors.grey),
                                   ),
                                 ),
-                                GoogleSignInButton(
+                                ElevatedButton(
                                   onPressed: () {
                                     _toggleLoadingStatus(true);
                                     signInWithGoogle();
                                   },
-                                  textStyle: TextStyle(
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white,
+                                  child: Text(
+                                    'Sign in with Google',
+                                    style: const TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                  darkMode: true,
+                                  // darkMode: true,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 25,
                                 ),
                               ],
@@ -196,14 +197,14 @@ class _RegisterFirebaseScreenState extends State<RegisterFirebaseScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-          builder: (BuildContext context) => LoginFirebaseScreen()),
+          builder: (BuildContext context) => const LoginFirebaseScreen()),
     );
   }
 
   void handleRegister(context) async {
-    FirebaseUser user;
+    User user;
     final form = formKey.currentState;
-    if (form.validate()) {
+    if (form!.validate()) {
       form.save();
       _toggleLoadingStatus(true);
       QuerySnapshot ref = await _store
@@ -211,57 +212,57 @@ class _RegisterFirebaseScreenState extends State<RegisterFirebaseScreen> {
           .where("id", isEqualTo: _userid)
           .snapshots()
           .first;
-      if (ref.documentChanges.isNotEmpty) {
-        _toggleLoadingStatus(false);
-        _showSnackBar("Username already exist");
-        return null;
-      }
+      // if (ref.documentChanges.isNotEmpty) {
+      //   _toggleLoadingStatus(false);
+      //   _showSnackBar("Username already exist");
+      //   return null;
+      // }
       try {
-        AuthResult result = await _auth.createUserWithEmailAndPassword(
-            email: _email, password: _password);
-        user = result.user;
+        // AuthResult result = await _auth.createUserWithEmailAndPassword(
+        //     email: _email, password: _password);
+        // user = result.user;
       } catch (error) {
-        if (error.message != null) {
-          _showSnackBar(error.message);
-        } else {
-          _showSnackBar('An unexpected error occured!');
-        }
-        _toggleLoadingStatus(false);
-        return null;
-      }
-    }
-    await _store
-        .collection('username')
-        .document(user.uid)
-        .setData({"id": _userid, "name": _name});
-    try {
-      UserUpdateInfo updateInfo = UserUpdateInfo();
-      updateInfo.displayName = _name;
-      await user.updateProfile(updateInfo);
-    } catch (error) {
-      if (error.message != null) {
-        _showSnackBar(error.message);
-      } else {
+        // if (error.message != null) {
+        //   _showSnackBar(error.message);
+        // } else {
         _showSnackBar('An unexpected error occured!');
       }
+      _toggleLoadingStatus(false);
       return null;
     }
-    await user.sendEmailVerification();
-    await _auth.signOut();
-    _toggleLoadingStatus(false);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => LoginFirebaseScreen(
-            snackBarMessage:
-                'A verification link has been sent to your e-mail account'),
-      ),
-    );
   }
+  // await _store
+  //     .collection('username')
+  //     .document(user.uid)
+  //     .setData({"id": _userid, "name": _name});
+  // try {
+  //   UserUpdateInfo updateInfo = UserUpdateInfo();
+  //   updateInfo.displayName = _name;
+  //   await user.updateProfile(updateInfo);
+  // } catch (error) {
+  //   if (error.message != null) {
+  //     _showSnackBar(error.message);
+  //   } else {
+  //     _showSnackBar('An unexpected error occured!');
+  //   }
+  //   return null;
+  // }
+  // await user.sendEmailVerification();
+  // await _auth.signOut();
+  // _toggleLoadingStatus(false);
+  // Navigator.pushReplacement(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (BuildContext context) => const LoginFirebaseScreen(
+  //           snackBarMessage:
+  //               'A verification link has been sent to your e-mail account'),
+  //     ),
+  //   );
+  // }
 
   Future<void> signInWithGoogle() async {
-    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    handleGSignIn(googleSignInAccount);
+    // final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    // handleGSignIn(googleSignInAccount);
   }
 
   handleGSignIn(GoogleSignInAccount googleSignInAccount) async {
@@ -269,19 +270,19 @@ class _RegisterFirebaseScreenState extends State<RegisterFirebaseScreen> {
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
 
-      final AuthCredential credential = GoogleAuthProvider.getCredential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken,
-      );
+      // final AuthCredential credential = GoogleAuthProvider.getCredential(
+      //   accessToken: googleSignInAuthentication.accessToken,
+      //   idToken: googleSignInAuthentication.idToken,
+      // );
 
-      final AuthResult authResult =
-          await _auth.signInWithCredential(credential);
-      final FirebaseUser user = authResult.user;
+      // final AuthResult authResult =
+      //     await _auth.signInWithCredential(credential);
+      // final User user = authResult.user;
 
       try {
         await createUserInFirestore(user);
       } catch (err) {
-        _showSnackBar(err);
+        // _showSnackBar(err);
         _toggleLoadingStatus(false);
         _signOut();
       }
@@ -300,28 +301,28 @@ class _RegisterFirebaseScreenState extends State<RegisterFirebaseScreen> {
     prefs.setString('loggedUserId', uid);
   }
 
-  createUserInFirestore(FirebaseUser user) async {
-    DocumentSnapshot documentSnapshot = await userRef.document(user.uid).get();
+  createUserInFirestore(User user) async {
+    // DocumentSnapshot documentSnapshot = await userRef.document(user.uid).get();
     //go to createAccount page - only for first reigstration
-    if (!documentSnapshot.exists) {
-      _toggleLoadingStatus(false);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => CreateAccount(
-                dispUser: user,
-              )));
-    } else {
+    // if (!documentSnapshot.exists) {
+    //   _toggleLoadingStatus(false);
+      // Navigator.of(context).pushReplacement(MaterialPageRoute(
+      //     // builder: (context) => CreateAccount(
+      //     //       dispUser: user,
+    //   //         )));
+    // } else {
       _toggleLoadingStatus(false);
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => Telehealth()));
+          MaterialPageRoute(builder: (context) => const Telehealth()));
     }
   }
 
   Future<void> _signOut() async {
-    await googleSignIn.signOut();
-    await _auth.signOut();
+    // await googleSignIn.signOut();
+    // await _auth.signOut();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('loggedUserId');
-    _toggleLoadingStatus(false);
+    // _toggleLoadingStatus(false);
   }
-}
+

@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
 class ShimmerPage extends StatefulWidget {
+  const ShimmerPage({super.key});
+
   @override
   _ShimmerPageState createState() => _ShimmerPageState();
 }

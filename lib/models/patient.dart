@@ -1,32 +1,32 @@
 class Patient {
-  String _id;
-  String _pid;
-  String _pubpid;
-  String _title;
-  String _fname;
-  String _mname;
-  String _lname;
-  String _street;
-  String _postalCode;
-  String _city;
-  String _state;
-  String _countryCode;
-  String _phoneContact;
-  String _dob;
-  String _sex;
-  String _race;
-  String _ethnicity;
-  String _username;
-  String _tokenType;
-  String _accessToken;
-  String _userId;
+  String? _accessToken;
+  String? _tokenType;
+  String? _userId;
+  String? _username;
+  String? _city;
+  String? _countryCode;
+  String? _dob;
+  String? _ethnicity;
+  String? _fname;
+  int? _id;
+  String? _lname;
+  String? _mname;
+  String? _phoneContact;
+  int? _pid;
+  String? _postalCode;
+  String? _pubpid;
+  String? _race;
+  String? _sex;
+  String? _state;
+  String? _street;
+  String? _title;
 
-  String get pid => _pid;
-  String get title => _title;
-  String get fname => _fname;
-  String get mname => _mname;
-  String get lname => _lname;
-  String get sex => _sex;
+  int get pid => _pid ?? 0;
+  String get title => _title ?? '';
+  String get fname => _fname ?? '';
+  String get mname => _mname ?? '';
+  String get lname => _lname ?? '';
+  String get sex => _sex ?? '';
 
   Patient(
       this._accessToken,
@@ -52,31 +52,31 @@ class Patient {
       this._title);
 
   Patient.map(dynamic obj) {
-    this._accessToken = obj["access_token"];
-    this._tokenType = obj["token_type"];
-    this._userId = obj["user_id"];
-    this._username = obj["username"];
-    this._city = obj["city"];
-    this._countryCode = obj["country_code"];
-    this._dob = obj["DOB"];
-    this._ethnicity = obj["ethnicity"];
-    this._fname = obj["fname"];
-    this._id = obj["id"];
-    this._lname = obj["lname"];
-    this._mname = obj["mname"];
-    this._phoneContact = obj["phone_contact"];
-    this._pid = obj["pid"];
-    this._postalCode = obj["postal_code"];
-    this._pubpid = obj["pubpid"];
-    this._race = obj["race"];
-    this._sex = obj["sex"];
-    this._state = obj["state"];
-    this._street = obj["street"];
-    this._title = obj["title"];
+    _accessToken = obj["access_token"];
+    _tokenType = obj["token_type"];
+    _userId = obj["user_id"];
+    _username = obj["username"];
+    _city = obj["city"];
+    _countryCode = obj["country_code"];
+    _dob = obj["DOB"];
+    _ethnicity = obj["ethnicity"];
+    _fname = obj["fname"];
+    _id = obj["id"];
+    _lname = obj["lname"];
+    _mname = obj["mname"];
+    _phoneContact = obj["phone_contact"];
+    _pid = obj["pid"];
+    _postalCode = obj["postal_code"];
+    _pubpid = obj["pubpid"];
+    _race = obj["race"];
+    _sex = obj["sex"];
+    _state = obj["state"];
+    _street = obj["street"];
+    _title = obj["title"];
   }
 
   Map<String, dynamic> toMap() {
-    var map = new Map<String, dynamic>();
+    var map = <String, dynamic>{};
     map["access_token"] = _accessToken;
     map["token_type"] = _tokenType;
     map["user_id"] = _userId;

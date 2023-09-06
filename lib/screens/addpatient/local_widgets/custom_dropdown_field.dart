@@ -6,11 +6,11 @@ class CustomDropdownField extends StatefulWidget {
   final Function updateValue;
   final String value;
 
-  CustomDropdownField({
-    this.label,
-    this.options,
-    this.updateValue,
-    this.value,
+  const CustomDropdownField({super.key, 
+    this.label = '',
+    required this.options,
+    required this.updateValue,
+    this.value = '',
   });
 
   @override
@@ -27,21 +27,21 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
         children: [
           Text(
             widget.label,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontSize: 16,
             ),
           ),
           DropdownButton<String>(
             value: widget.value,
-            icon: Icon(Icons.arrow_drop_down_rounded),
+            icon: const Icon(Icons.arrow_drop_down_rounded),
             iconSize: 20,
             elevation: 16,
             underline: Container(
               height: 2,
               color: Colors.black,
             ),
-            onChanged: (String newValue) {
+            onChanged: (String? newValue) {
               setState(() {
                 widget.updateValue(newValue);
               });
